@@ -1,0 +1,64 @@
+.root {
+    -fx-primary: #173f6b;
+    -fx-primary-dark: #112b46;
+    -fx-accent: #ef6b2e;
+    -fx-bg: #f6f0e7;
+    -fx-surface: #fffaf5;
+    -fx-border: #ddd2c2;
+    -fx-text: #213247;
+    -fx-text-muted: #6a7788;
+    -fx-control-inner-background: white;
+}
+
+.root.dark {
+    -fx-primary: #6ea7de;
+    -fx-primary-dark: #f3f7fb;
+    -fx-accent: #ff8a4d;
+    -fx-bg: #08111d;
+    -fx-surface: #101c2d;
+    -fx-border: #22344a;
+    -fx-text: #edf3fa;
+    -fx-text-muted: #9db0c5;
+    -fx-control-inner-background: #122033;
+}
+
+.tab-pane { -fx-background-color: -fx-bg; }
+.tab-pane .tab-header-area .tab-header-background { -fx-background-color: -fx-bg; }
+.tab { -fx-background-color: -fx-surface; -fx-border-color: -fx-border; -fx-border-width: 0 1 0 0; }
+.tab:selected { -fx-background-color: -fx-primary; }
+.tab:selected .tab-label { -fx-text-fill: white; }
+.tab .tab-label { -fx-text-fill: -fx-text-muted; }
+
+.table-view {
+    -fx-background-color: -fx-surface;
+    -fx-border-color: -fx-border;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+}
+.table-view .column-header { -fx-background-color: -fx-surface; -fx-border-color: -fx-border; -fx-border-width: 0 0 1 0; }
+.table-view .table-cell { -fx-text-fill: -fx-text; -fx-border-color: transparent; }
+.table-row-cell:odd { -fx-background-color: -fx-surface; }
+.table-row-cell:even { -fx-background-color: -fx-bg; }
+
+.text-field, .text-area, .combo-box {
+    -fx-background-color: -fx-control-inner-background;
+    -fx-text-fill: -fx-text;
+    -fx-border-color: -fx-border;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.button {
+    -fx-font-weight: 700;
+    -fx-background-radius: 10;
+}
+
+.header {
+    -fx-background-color: -fx-surface;
+    -fx-border-color: -fx-border;
+    -fx-border-width: 0 0 1 0;
+}
+
+.label-titulo { -fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: -fx-primary-dark; }
+.label-subtitulo { -fx-font-size: 13; -fx-text-fill: -fx-text-muted; }
+.label-normal { -fx-text-fill: -fx-text; }

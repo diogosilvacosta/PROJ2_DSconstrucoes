@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhe da Obra — DS Construções</title>
+  <script>
+    (() => {
+      const savedTheme = localStorage.getItem('ds-theme');
+      const theme = (savedTheme === 'light' || savedTheme === 'dark')
+        ? savedTheme
+        : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    })();
+  </script>
+  <link rel="icon" type="image/png" href="assets/ds-construcoes-logo.png?v=20260418d">
+  <link rel="stylesheet" href="style.css?v=20260418d">
+  <script src="theme.js?v=20260418a" defer></script>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="logo">🏗️ DS Construções</div>
+      <a class="brand" href="index.html" aria-label="DS Construcoes">
+        <img class="brand-logo" src="assets/ds-construcoes-logo.png?v=20260418d" alt="DS Construcoes">
+      </a>
+      <div class="header-actions">
+      <nav>
+        <a href="index.html">Portfólio</a>
+        <a href="cliente.html">Portal Cliente</a>
+      </nav>
+      <button type="button" class="theme-toggle" data-theme-toggle>Night mode</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <a href="index.html" class="back-btn">← Voltar</a>
+    <div id="detalhe"></div>
+  </div>
+
+  <footer>
+    <p>© 2026 DS Construções · Diogo Costa Nº29761 · Projeto II IPVC</p>
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const obraId = params.get('id');
+
+    async function carregar() {
+      const div = document.getElementById('detalhe');
+      if (!obraId) { div.innerHTML = '<p class="empty">ID de obra não especificado.</p>'; return; }
+      try {
+        const res = await fetch(`/api/obra/${obraId}/detalhe`);
+        const d = await res.json();
+        if (!d.obraid) { div.innerHTML = '<p class="empty">Obra não encontrada.</p>'; return; }
+
+        const extras = parseFloat(d.extras || 0);
+        const extrasHtml = extras > 0
+          ? `<div class="alert-extras">⚠️ Valor em extras: <strong>${fmt(extras)}€</strong></div>`
+          : `<div class="alert-ok">✅ Dentro do orçamento</div>`;
+
+        div.innerHTML = `
+          <h1>Obra #${d.obraid}</h1>
+          <div class="badges-row">
+            <span class="badge ${badgeClass(d.estado)}">${d.estado}</span>
+            <span class="badge badge-gray">📅 ${d.datainicio || '—'}</span>
+          </div>
+
+          <div class="progress-bar big">
+            <div class="progress-fill" style="width:${d.percentagem||0}%"></div>
+          </div>
+          <p class="progress-label">${d.percentagem||0}% concluído</p>
+
+          <div class="info-grid">
+            <div class="info-box">
+              <div class="info-label">Orçamento inicial</div>
+              <div class="info-value">${fmt(d.orcamento||0)}€</div>
+            </div>
+            <div class="info-box">
+              <div class="info-label">Custo materiais</div>
+              <div class="info-value">${fmt(d.custoMateriais||0)}€</div>
+            </div>
+            <div class="info-box">
+              <div class="info-label">Custo mão de obra</div>
+              <div class="info-value">${fmt(d.custoMaodeobra||0)}€</div>
+            </div>
+            <div class="info-box highlight">
+              <div class="info-label">Custo total atual</div>
+              <div class="info-value">${fmt(d.custoTotal||0)}€</div>
+            </div>
+          </div>
+
+          ${extrasHtml}
+
+          <h2>📦 Materiais</h2>
+          ${tabelaMateriais(d.materiais||[])}
+
+          <h2>👷 Mão de Obra</h2>
+          ${tabelaMdo(d.maodeobra||[])}
+        `;
+      } catch(e) {
+        document.getElementById('detalhe').innerHTML = '<p class="empty">Erro ao carregar dados.</p>';
+      }
+    }
+
+    function tabelaMateriais(list) {
+      if (!list.length) return '<p class="empty">Sem materiais registados.</p>';
+      return `<table><thead><tr><th>Material</th><th>Un.</th><th>Qtd</th><th>Preço/Un</th><th>Total</th></tr></thead><tbody>
+        ${list.map(m => `<tr><td>${m.descricao}</td><td>${m.unidade}</td><td>${m.quantidade}</td><td>${fmt(m.precoUnit)}€</td><td><strong>${fmt(m.total)}€</strong></td></tr>`).join('')}
+      </tbody></table>`;
+    }
+
+    function tabelaMdo(list) {
+      if (!list.length) return '<p class="empty">Sem mão de obra registada.</p>';
+      return `<table><thead><tr><th>Funcionário</th><th>Horas</th><th>€/hora</th><th>Total</th></tr></thead><tbody>
+        ${list.map(m => `<tr><td>${m.funcionario}</td><td>${m.horas}h</td><td>${fmt(m.custoHora)}€</td><td><strong>${fmt(m.total)}€</strong></td></tr>`).join('')}
+      </tbody></table>`;
+    }
+
+    function fmt(v) { return parseFloat(v||0).toFixed(2); }
+    function badgeClass(e) { return {'CONCLUIDA':'badge-green','EM_PROGRESSO':'badge-blue','INICIADA':'badge-orange'}[e]||'badge-gray'; }
+
+    carregar();
+  </script>
+</body>
+</html>
