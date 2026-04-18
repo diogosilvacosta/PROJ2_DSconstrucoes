@@ -1,3 +1,6 @@
+﻿/* ===== DS Construcoes — Desktop App ===== */
+
+/* ROOT: looked-up colors for light mode */
 .root {
     -fx-primary: #173f6b;
     -fx-primary-dark: #112b46;
@@ -8,8 +11,10 @@
     -fx-text: #213247;
     -fx-text-muted: #6a7788;
     -fx-control-inner-background: white;
+    -fx-focus-color: -fx-primary;
 }
 
+/* ROOT: dark mode overrides */
 .root.dark {
     -fx-primary: #6ea7de;
     -fx-primary-dark: #f3f7fb;
@@ -20,6 +25,7 @@
     -fx-text: #edf3fa;
     -fx-text-muted: #9db0c5;
     -fx-control-inner-background: #122033;
+    -fx-focus-color: -fx-primary;
 }
 
 /* Backgrounds */
@@ -32,13 +38,22 @@
     -fx-background-radius: 14; 
 }
 
+/* Header */
+.header {
+    -fx-background-color: -fx-surface;
+    -fx-border-color: -fx-border;
+    -fx-border-width: 0 0 1 0;
+}
+
 /* Tabs */
 .tab-pane { -fx-background-color: -fx-bg; }
-.tab-pane .tab-header-area .tab-header-background { -fx-background-color: -fx-bg; }
+.tab-pane .tab-header-area .tab-header-background { -fx-background-color: -fx-surface; }
+.tab-pane .tab-header-area { -fx-background-color: -fx-surface; -fx-border-color: -fx-border; -fx-border-width: 0 0 1 0; }
 .tab { -fx-background-color: -fx-surface; -fx-border-color: -fx-border; -fx-border-width: 0 1 0 0; }
 .tab:selected { -fx-background-color: -fx-primary; }
 .tab:selected .tab-label { -fx-text-fill: white; }
 .tab .tab-label { -fx-text-fill: -fx-text-muted; }
+.tab:hover .tab-label { -fx-text-fill: -fx-text; }
 
 /* TableView */
 .table-view {
@@ -46,22 +61,73 @@
     -fx-border-color: -fx-border;
     -fx-border-radius: 12;
     -fx-background-radius: 12;
+    -fx-table-cell-border-color: -fx-border;
 }
-.table-view .column-header { -fx-background-color: -fx-surface; -fx-border-color: -fx-border; -fx-border-width: 0 0 1 0; }
-.table-view .table-cell { -fx-text-fill: -fx-text; -fx-border-color: transparent; }
+.table-view .column-header-background {
+    -fx-background-color: -fx-surface;
+}
+.table-view .column-header {
+    -fx-background-color: -fx-surface;
+    -fx-border-color: -fx-border;
+    -fx-border-width: 0 0 1 0;
+}
+.table-view .column-header .label {
+    -fx-text-fill: -fx-text;
+    -fx-font-weight: bold;
+}
+.table-view .table-cell {
+    -fx-text-fill: -fx-text;
+    -fx-border-color: transparent;
+}
+.table-row-cell {
+    -fx-background-color: -fx-control-inner-background;
+    -fx-border-color: -fx-border;
+    -fx-border-width: 0 0 1 0;
+}
 .table-row-cell:odd { -fx-background-color: -fx-control-inner-background; }
-.table-row-cell:even { -fx-background-color: -fx-bg; }
+.table-row-cell:even {
+    -fx-background-color: derive(-fx-bg, 10%);
+}
+.table-row-cell:selected {
+    -fx-background-color: derive(-fx-primary, 60%);
+}
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: -fx-text;
+}
+.table-row-cell:hover {
+    -fx-background-color: derive(-fx-surface, -5%);
+}
 
 /* Inputs */
 .text-field, .text-area, .combo-box, .date-picker {
     -fx-background-color: -fx-control-inner-background;
     -fx-text-fill: -fx-text;
+    -fx-prompt-text-fill: -fx-text-muted;
     -fx-border-color: -fx-border;
     -fx-border-radius: 10;
     -fx-background-radius: 10;
 }
-.text-field:focused, .text-area:focused, .combo-box:focused {
+.text-field:focused, .text-area:focused, .combo-box:focused, .date-picker:focused {
     -fx-border-color: -fx-primary;
+}
+.combo-box .list-cell {
+    -fx-background-color: -fx-control-inner-background;
+    -fx-text-fill: -fx-text;
+}
+.combo-box-popup .list-view {
+    -fx-background-color: -fx-control-inner-background;
+    -fx-border-color: -fx-border;
+}
+.combo-box-popup .list-cell {
+    -fx-background-color: -fx-control-inner-background;
+    -fx-text-fill: -fx-text;
+}
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: derive(-fx-surface, -5%);
+}
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
 }
 
 /* Labels */
@@ -75,11 +141,9 @@
     -fx-background-radius: 10;
 }
 
-/* Header */
-.header {
-    -fx-background-color: -fx-surface;
+/* Separator */
+.separator .line {
     -fx-border-color: -fx-border;
-    -fx-border-width: 0 0 1 0;
 }
 
 /* Custos Cards */
@@ -88,4 +152,30 @@
     -fx-background-radius: 14;
     -fx-border-radius: 14;
     -fx-border-width: 0 0 0 4;
+}
+
+/* ScrollPane */
+.scroll-pane {
+    -fx-background-color: -fx-bg;
+}
+.scroll-pane .viewport {
+    -fx-background-color: -fx-bg;
+}
+
+/* Context Menu */
+.context-menu {
+    -fx-background-color: -fx-surface;
+    -fx-border-color: -fx-border;
+}
+.menu-item {
+    -fx-background-color: transparent;
+}
+.menu-item .label {
+    -fx-text-fill: -fx-text;
+}
+.menu-item:hover {
+    -fx-background-color: -fx-primary;
+}
+.menu-item:hover .label {
+    -fx-text-fill: white;
 }

@@ -151,7 +151,7 @@ public class DesktopApp extends Application {
             new Tab("Custos", criarPainelCustos())
         );
         tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        tabs.setStyle("-fx-background-color: " + COLOR_BG + "; -fx-accent: " + COLOR_PRIMARY + "; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
+        tabs.setStyle("-fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
         return tabs;
     }
 
@@ -529,7 +529,7 @@ public class DesktopApp extends Application {
     private VBox criarPainelCustos() {
         VBox painel = new VBox(20);
         painel.setPadding(new Insets(24));
-        painel.setStyle("-fx-background-color: " + COLOR_BG + ";");
+        painel.getStyleClass().add("painel-principal");
         Label titulo = titulo("Resumo de Custos por Obra", 18);
         Label instrucao = subtitulo("Selecione uma obra no separador Obras e clique em Calcular.");
         Button calcular = botao("Calcular custos da obra selecionada", "#173f6b");
@@ -562,7 +562,8 @@ public class DesktopApp extends Application {
         VBox card = new VBox(6);
         card.setPadding(new Insets(16));
         card.setPrefWidth(230);
-        card.setStyle("-fx-background-color: " + COLOR_SURFACE + "; -fx-background-radius: 14; -fx-border-color: " + cor + "; -fx-border-width: 0 0 0 4; -fx-border-radius: 14;");
+        card.getStyleClass().add("custo-card");
+        card.setStyle("-fx-border-color: " + cor + ";");
         Label l1 = subtitulo(label);
         Label l2 = titulo(String.format("%.2f EUR", valor), 20);
         l2.setTextFill(Color.web(cor));
@@ -602,8 +603,8 @@ public class DesktopApp extends Application {
     private BorderPane painelPrincipal(TableView<?> tabela, VBox form, Button refresh) {
         BorderPane painel = new BorderPane();
         painel.setPadding(new Insets(20));
-        painel.setStyle("-fx-background-color: " + COLOR_BG + ";");
-        tabela.setStyle("-fx-background-color: white; -fx-control-inner-background: white; -fx-background-insets: 0; -fx-border-color: " + COLOR_BORDER + "; -fx-border-radius: 12; -fx-background-radius: 12; -fx-table-cell-border-color: #efe7dc; -fx-accent: " + COLOR_PRIMARY + "; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
+        painel.getStyleClass().add("painel-principal");
+        tabela.setStyle("-fx-accent: " + COLOR_PRIMARY + "; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
         painel.setTop(new HBox(10, refresh));
         painel.setCenter(tabela);
         painel.setRight(form);
@@ -614,7 +615,7 @@ public class DesktopApp extends Application {
         VBox box = new VBox(10);
         box.setPrefWidth(340);
         box.setPadding(new Insets(16));
-        box.setStyle("-fx-background-color: " + COLOR_SURFACE + "; -fx-background-radius: 14; -fx-border-color: " + COLOR_BORDER + "; -fx-border-radius: 14;");
+        box.getStyleClass().add("painel-lateral");
         box.getChildren().addAll(titulo(titulo, 14), new Separator());
         return box;
     }
@@ -664,7 +665,7 @@ public class DesktopApp extends Application {
     private TextField campo(String prompt) {
         TextField tf = new TextField();
         tf.setPromptText(prompt);
-        tf.setStyle("-fx-background-color: white; -fx-text-fill: " + COLOR_TEXT + "; -fx-prompt-text-fill: " + COLOR_MUTED + "; -fx-background-radius: 10; -fx-border-color: " + COLOR_BORDER + "; -fx-border-radius: 10;");
+        // CSS handles .text-field styles
         return tf;
     }
 
@@ -673,7 +674,7 @@ public class DesktopApp extends Application {
         ta.setPromptText(prompt);
         ta.setPrefRowCount(4);
         ta.setWrapText(true);
-        ta.setStyle("-fx-background-color: white; -fx-text-fill: " + COLOR_TEXT + "; -fx-prompt-text-fill: " + COLOR_MUTED + "; -fx-background-radius: 10; -fx-border-color: " + COLOR_BORDER + "; -fx-border-radius: 10;");
+        // CSS handles .text-area styles
         return ta;
     }
 
@@ -781,11 +782,11 @@ public class DesktopApp extends Application {
     }
 
     private void estilizarCombo(ComboBox<?> cb) {
-        cb.setStyle("-fx-background-color: white; -fx-border-color: " + COLOR_BORDER + "; -fx-border-radius: 10; -fx-background-radius: 10;");
+        // CSS handles .combo-box styles
     }
 
     private void estilizarDatePicker(DatePicker datePicker) {
-        datePicker.setStyle("-fx-background-color: white; -fx-border-color: " + COLOR_BORDER + "; -fx-border-radius: 10; -fx-background-radius: 10;");
+        // CSS handles .date-picker styles
     }
 
     private String idObra(Obra obra) { return obra == null || obra.getId() == null ? "-" : "#" + obra.getId(); }
