@@ -22,6 +22,17 @@
     -fx-control-inner-background: #122033;
 }
 
+/* Backgrounds */
+.main-root { -fx-background-color: -fx-bg; }
+.painel-principal { -fx-background-color: -fx-bg; }
+.painel-lateral { 
+    -fx-background-color: -fx-surface; 
+    -fx-border-color: -fx-border; 
+    -fx-border-radius: 14; 
+    -fx-background-radius: 14; 
+}
+
+/* Tabs */
 .tab-pane { -fx-background-color: -fx-bg; }
 .tab-pane .tab-header-area .tab-header-background { -fx-background-color: -fx-bg; }
 .tab { -fx-background-color: -fx-surface; -fx-border-color: -fx-border; -fx-border-width: 0 1 0 0; }
@@ -29,36 +40,52 @@
 .tab:selected .tab-label { -fx-text-fill: white; }
 .tab .tab-label { -fx-text-fill: -fx-text-muted; }
 
+/* TableView */
 .table-view {
-    -fx-background-color: -fx-surface;
+    -fx-background-color: -fx-control-inner-background;
     -fx-border-color: -fx-border;
     -fx-border-radius: 12;
     -fx-background-radius: 12;
 }
 .table-view .column-header { -fx-background-color: -fx-surface; -fx-border-color: -fx-border; -fx-border-width: 0 0 1 0; }
 .table-view .table-cell { -fx-text-fill: -fx-text; -fx-border-color: transparent; }
-.table-row-cell:odd { -fx-background-color: -fx-surface; }
+.table-row-cell:odd { -fx-background-color: -fx-control-inner-background; }
 .table-row-cell:even { -fx-background-color: -fx-bg; }
 
-.text-field, .text-area, .combo-box {
+/* Inputs */
+.text-field, .text-area, .combo-box, .date-picker {
     -fx-background-color: -fx-control-inner-background;
     -fx-text-fill: -fx-text;
     -fx-border-color: -fx-border;
     -fx-border-radius: 10;
     -fx-background-radius: 10;
 }
+.text-field:focused, .text-area:focused, .combo-box:focused {
+    -fx-border-color: -fx-primary;
+}
 
+/* Labels */
+.label-titulo { -fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: -fx-primary-dark; }
+.label-subtitulo { -fx-font-size: 13; -fx-text-fill: -fx-text-muted; }
+.label-normal { -fx-text-fill: -fx-text; }
+
+/* Buttons */
 .button {
     -fx-font-weight: 700;
     -fx-background-radius: 10;
 }
 
+/* Header */
 .header {
     -fx-background-color: -fx-surface;
     -fx-border-color: -fx-border;
     -fx-border-width: 0 0 1 0;
 }
 
-.label-titulo { -fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: -fx-primary-dark; }
-.label-subtitulo { -fx-font-size: 13; -fx-text-fill: -fx-text-muted; }
-.label-normal { -fx-text-fill: -fx-text; }
+/* Custos Cards */
+.custo-card {
+    -fx-background-color: -fx-surface;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-width: 0 0 0 4;
+}

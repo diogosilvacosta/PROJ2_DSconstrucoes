@@ -113,6 +113,7 @@ public class DesktopApp extends Application {
     @Override
     public void start(Stage stage) {
         mainRoot = new BorderPane();
+        mainRoot.getStyleClass().add("main-root");
         mainRoot.setTop(criarHeader());
         mainRoot.setCenter(criarTabs());
         carregarDados();
@@ -151,7 +152,6 @@ public class DesktopApp extends Application {
             new Tab("Custos", criarPainelCustos())
         );
         tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        tabs.setStyle("-fx-background-color: " + COLOR_BG + "; -fx-accent: " + COLOR_PRIMARY + "; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
         return tabs;
     }
 
@@ -482,14 +482,11 @@ public class DesktopApp extends Application {
         TextField tfRetencao = campo("Retencao");
         DatePicker emissao = new DatePicker(LocalDate.now());
         DatePicker vencimento = new DatePicker(LocalDate.now().plusDays(30));
-        estilizarDatePicker(emissao);
-        estilizarDatePicker(vencimento);
-        Label status = statusLabel();
+        statusLabel();
         Button emitir = botao("Emitir Fatura", "#ef6b2e");
         emitir.setOnAction(e -> {
             Automedicao auto = cbAutomedicao.getValue();
             if (auto == null) {
-                status(status, false, "Selecione uma auto-medicao.");
                 return;
             }
             try {
@@ -505,31 +502,27 @@ public class DesktopApp extends Application {
                 f.setRetencao(parseDefault(tfRetencao.getText(), BigDecimal.ZERO));
                 faturaService.emitirFatura(f);
                 carregarFaturas();
-                status(status, true, "Fatura emitida.");
                 limpar(tfNumero, tfValor, tfIva, tfRetencao);
             } catch (Exception ex) {
-                status(status, false, ex.getMessage());
             }
         });
         Button pagar = botao("Marcar como Paga", "#173f6b");
         pagar.setOnAction(e -> {
             Fatura selecionada = tabela.getSelectionModel().getSelectedItem();
             if (selecionada == null) {
-                status(status, false, "Selecione uma fatura.");
                 return;
             }
             faturaService.registarPagamento(selecionada.getId());
             carregarFaturas();
-            status(status, true, "Fatura marcada como paga.");
         });
-        form.getChildren().addAll(label("Auto-medicao"), cbAutomedicao, label("Numero"), tfNumero, label("Valor"), tfValor, label("IVA"), tfIva, label("Retencao"), tfRetencao, label("Data emissao"), emissao, label("Data vencimento"), vencimento, emitir, pagar, status);
+        form.getChildren().addAll(label("Auto-medicao"), cbAutomedicao, label("Numero"), tfNumero, label("Valor"), tfValor, label("IVA"), tfIva, label("Retencao"), tfRetencao, label("Data emissao"), emissao, label("Data vencimento"), vencimento, emitir, pagar);
         return painelPrincipal(tabela, form, botaoAtualizar(this::carregarFaturas));
     }
 
     private VBox criarPainelCustos() {
         VBox painel = new VBox(20);
+        painel.getStyleClass().add("painel-principal");
         painel.setPadding(new Insets(24));
-        painel.setStyle("-fx-background-color: " + COLOR_BG + ";");
         Label titulo = titulo("Resumo de Custos por Obra", 18);
         Label instrucao = subtitulo("Selecione uma obra no separador Obras e clique em Calcular.");
         Button calcular = botao("Calcular custos da obra selecionada", "#173f6b");
@@ -560,9 +553,10 @@ public class DesktopApp extends Application {
 
     private VBox card(String label, BigDecimal valor, String cor) {
         VBox card = new VBox(6);
+        card.getStyleClass().add("custo-card");
         card.setPadding(new Insets(16));
         card.setPrefWidth(230);
-        card.setStyle("-fx-background-color: " + COLOR_SURFACE + "; -fx-background-radius: 14; -fx-border-color: " + cor + "; -fx-border-width: 0 0 0 4; -fx-border-radius: 14;");
+        card.setStyle("-fx-border-color: " + cor + ";");
         Label l1 = subtitulo(label);
         Label l2 = titulo(String.format("%.2f EUR", valor), 20);
         l2.setTextFill(Color.web(cor));
@@ -601,9 +595,8 @@ public class DesktopApp extends Application {
 
     private BorderPane painelPrincipal(TableView<?> tabela, VBox form, Button refresh) {
         BorderPane painel = new BorderPane();
+        painel.getStyleClass().add("painel-principal");
         painel.setPadding(new Insets(20));
-        painel.setStyle("-fx-background-color: " + COLOR_BG + ";");
-        tabela.setStyle("-fx-background-color: white; -fx-control-inner-background: white; -fx-background-insets: 0; -fx-border-color: " + COLOR_BORDER + "; -fx-border-radius: 12; -fx-background-radius: 12; -fx-table-cell-border-color: #efe7dc; -fx-accent: " + COLOR_PRIMARY + "; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
         painel.setTop(new HBox(10, refresh));
         painel.setCenter(tabela);
         painel.setRight(form);
@@ -612,9 +605,9 @@ public class DesktopApp extends Application {
 
     private VBox painelLateral(String titulo) {
         VBox box = new VBox(10);
+        box.getStyleClass().add("painel-lateral");
         box.setPrefWidth(340);
         box.setPadding(new Insets(16));
-        box.setStyle("-fx-background-color: " + COLOR_SURFACE + "; -fx-background-radius: 14; -fx-border-color: " + COLOR_BORDER + "; -fx-border-radius: 14;");
         box.getChildren().addAll(titulo(titulo, 14), new Separator());
         return box;
     }
@@ -664,7 +657,6 @@ public class DesktopApp extends Application {
     private TextField campo(String prompt) {
         TextField tf = new TextField();
         tf.setPromptText(prompt);
-        tf.setStyle("-fx-background-color: white; -fx-text-fill: " + COLOR_TEXT + "; -fx-prompt-text-fill: " + COLOR_MUTED + "; -fx-background-radius: 10; -fx-border-color: " + COLOR_BORDER + "; -fx-border-radius: 10;");
         return tf;
     }
 
@@ -673,13 +665,12 @@ public class DesktopApp extends Application {
         ta.setPromptText(prompt);
         ta.setPrefRowCount(4);
         ta.setWrapText(true);
-        ta.setStyle("-fx-background-color: white; -fx-text-fill: " + COLOR_TEXT + "; -fx-prompt-text-fill: " + COLOR_MUTED + "; -fx-background-radius: 10; -fx-border-color: " + COLOR_BORDER + "; -fx-border-radius: 10;");
         return ta;
     }
 
     private Button botao(String texto, String cor) {
         Button b = new Button(texto);
-        b.setStyle("-fx-background-color: " + cor + "; -fx-text-fill: white; -fx-font-weight: 700; -fx-padding: 10 18; -fx-background-radius: 10;");
+        b.setStyle("-fx-background-color: " + cor + "; -fx-text-fill: white;");
         return b;
     }
 
@@ -693,14 +684,12 @@ public class DesktopApp extends Application {
         ComboBox<String> cb = new ComboBox<>(FXCollections.observableArrayList(valores));
         cb.setMaxWidth(Double.MAX_VALUE);
         if (valores.length > 0) cb.setValue(valores[0]);
-        estilizarCombo(cb);
         return cb;
     }
 
     private ComboBox<Cliente> comboClientes() {
         ComboBox<Cliente> cb = new ComboBox<>(clientes);
         cb.setMaxWidth(Double.MAX_VALUE);
-        estilizarCombo(cb);
         cb.setCellFactory(lv -> new ListCell<>() {
             @Override protected void updateItem(Cliente i, boolean empty) { super.updateItem(i, empty); setText(empty || i == null ? "" : "#" + i.getId() + " - " + i.getNome()); }
         });
@@ -713,7 +702,6 @@ public class DesktopApp extends Application {
     private ComboBox<Proposta> comboPropostas() {
         ComboBox<Proposta> cb = new ComboBox<>(propostas);
         cb.setMaxWidth(Double.MAX_VALUE);
-        estilizarCombo(cb);
         cb.setCellFactory(lv -> new ListCell<>() {
             @Override protected void updateItem(Proposta i, boolean empty) { super.updateItem(i, empty); setText(empty || i == null ? "" : "#" + i.getId() + " - " + nomeCliente(i.getClienteid())); }
         });
@@ -726,7 +714,6 @@ public class DesktopApp extends Application {
     private ComboBox<Obra> comboObras() {
         ComboBox<Obra> cb = new ComboBox<>(obras);
         cb.setMaxWidth(Double.MAX_VALUE);
-        estilizarCombo(cb);
         cb.setCellFactory(lv -> new ListCell<>() {
             @Override protected void updateItem(Obra i, boolean empty) { super.updateItem(i, empty); setText(empty || i == null ? "" : idObra(i) + " - " + nomeCliente(i.getClienteid())); }
         });
@@ -739,7 +726,6 @@ public class DesktopApp extends Application {
     private ComboBox<Funcionario> comboFuncionarios() {
         ComboBox<Funcionario> cb = new ComboBox<>(funcionarios);
         cb.setMaxWidth(Double.MAX_VALUE);
-        estilizarCombo(cb);
         cb.setCellFactory(lv -> new ListCell<>() {
             @Override protected void updateItem(Funcionario i, boolean empty) { super.updateItem(i, empty); setText(empty || i == null ? "" : i.getNome() + " (" + i.getCargo() + ")"); }
         });
@@ -752,7 +738,6 @@ public class DesktopApp extends Application {
     private ComboBox<Automedicao> comboAutomedicoes() {
         ComboBox<Automedicao> cb = new ComboBox<>(automedicoes);
         cb.setMaxWidth(Double.MAX_VALUE);
-        estilizarCombo(cb);
         cb.setCellFactory(lv -> new ListCell<>() {
             @Override protected void updateItem(Automedicao i, boolean empty) { super.updateItem(i, empty); setText(empty || i == null ? "" : "#" + i.getId() + " - " + idObra(i.getObraid())); }
         });
@@ -762,35 +747,10 @@ public class DesktopApp extends Application {
         return cb;
     }
 
-    private String nomeCliente(Cliente c) {
-        Integer id = c == null ? null : c.getId();
-        if (id == null) return "-";
-        for (Cliente cliente : clientes) {
-            if (id.equals(cliente.getId())) return cliente.getNome();
-        }
-        return "#" + id;
-    }
-
-    private String nomeFuncionario(Funcionario f) {
-        Integer id = f == null ? null : f.getId();
-        if (id == null) return "-";
-        for (Funcionario funcionario : funcionarios) {
-            if (id.equals(funcionario.getId())) return funcionario.getNome();
-        }
-        return "#" + id;
-    }
-
-    private void estilizarCombo(ComboBox<?> cb) {
-        cb.setStyle("-fx-background-color: white; -fx-border-color: " + COLOR_BORDER + "; -fx-border-radius: 10; -fx-background-radius: 10;");
-    }
-
-    private void estilizarDatePicker(DatePicker datePicker) {
-        datePicker.setStyle("-fx-background-color: white; -fx-border-color: " + COLOR_BORDER + "; -fx-border-radius: 10; -fx-background-radius: 10;");
-    }
-
     private String idObra(Obra obra) { return obra == null || obra.getId() == null ? "-" : "#" + obra.getId(); }
     private BigDecimal parse(String valor) { return valor == null || valor.isBlank() ? BigDecimal.ZERO : new BigDecimal(valor.trim()); }
     private BigDecimal parseDefault(String valor, BigDecimal fallback) { return valor == null || valor.isBlank() ? fallback : new BigDecimal(valor.trim()); }
     private void limpar(TextField... campos) { for (TextField campo : campos) campo.clear(); }
     private void status(Label lbl, boolean ok, String txt) { lbl.setTextFill(Color.web(ok ? "#86efac" : "#f87171")); lbl.setText(txt == null || txt.isBlank() ? "Operacao invalida." : txt); }
 }
+
