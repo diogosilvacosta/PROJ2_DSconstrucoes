@@ -48,10 +48,4 @@
       applyTheme(event.matches ? "dark" : "light");
     }
   });
-
-  window.addEventListener("storage", (event) => {
-    if (event.key === storageKey && (event.newValue === "light" || event.newValue === "dark")) {
-      applyTheme(event.newValue);
-    }
-  });
 })();
