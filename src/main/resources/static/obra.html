@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhe da Obra ââ¬â DS ConstruÃÂ§ÃÂµes</title>
+  <script>
+    (() => {
+      const savedTheme = localStorage.getItem('ds-theme');
+      const theme = (savedTheme === 'light' || savedTheme === 'dark')
+        ? savedTheme
+        : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    })();
+  </script>
+  <link rel="icon" type="image/png" href="assets/ds-construcoes-logo.png?v=20260418d">
+  <link rel="stylesheet" href="style.css?v=20260418d">
+  <script src="theme.js?v=20260418a" defer></script>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="DS Construcoes">
+        <img class="brand-logo" src="assets/ds-construcoes-logo.png?v=20260418d" alt="DS Construcoes">
+        <span class="brand-name">DS Constru&#231;&#245;es</span>
+      </a>
+      <div class="header-actions">
+      <nav>
+        <a href="index.html">PortfÃÂ³lio</a>
+        <a href="cliente.html">Portal Cliente</a>
+      </nav>
+      <button type="button" class="theme-toggle" data-theme-toggle>Night mode</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <a href="index.html" class="back-btn">ââ Â Voltar</a>
+    <div id="detalhe"></div>
+  </div>
+
+  <footer>
+    <p>ÃÂ© 2026 DS ConstruÃÂ§ÃÂµes ÃÂ· Diogo Costa NÃÂº29761 ÃÂ· Projeto II IPVC</p>
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const obraId = params.get('id');
+
+    async function carregar() {
+      const div = document.getElementById('detalhe');
+      if (!obraId) { div.innerHTML = '<p class="empty">ID de obra nÃÂ£o especificado.</p>'; return; }
+      try {
+        const res = await fetch(`/api/obra/${obraId}/detalhe`);
+        const d = await res.json();
+        if (!d.obraid) { div.innerHTML = '<p class="empty">Obra nÃÂ£o encontrada.</p>'; return; }
+
+        const extras = parseFloat(d.extras || 0);
+        const extrasHtml = extras > 0
+          ? `<div class="alert-extras">âÅ¡Â Ã¯Â¸Â Valor em extras: <strong>${fmt(extras)}ââÂ¬</strong></div>`
+          : `<div class="alert-ok">âÅâ¦ Dentro do orÃÂ§amento</div>`;
+
+        div.innerHTML = `
+          <h1>Obra #${d.obraid}</h1>
+          <div class="badges-row">
+            <span class="badge ${badgeClass(d.estado)}">${d.estado}</span>
+            <span class="badge badge-gray">Ã°Å¸ââ¦ ${d.datainicio || 'ââ¬â'}</span>
+          </div>
+
+          <div class="progress-bar big">
+            <div class="progress-fill" style="width:${d.percentagem||0}%"></div>
+          </div>
+          <p class="progress-label">${d.percentagem||0}% concluÃÂ­do</p>
+
+          <div class="info-grid">
+            <div class="info-box">
+              <div class="info-label">OrÃÂ§amento inicial</div>
+              <div class="info-value">${fmt(d.orcamento||0)}ââÂ¬</div>
+            </div>
+            <div class="info-box">
+              <div class="info-label">Custo materiais</div>
+              <div class="info-value">${fmt(d.custoMateriais||0)}ââÂ¬</div>
+            </div>
+            <div class="info-box">
+              <div class="info-label">Custo mÃÂ£o de obra</div>
+              <div class="info-value">${fmt(d.custoMaodeobra||0)}ââÂ¬</div>
+            </div>
+            <div class="info-box highlight">
+              <div class="info-label">Custo total atual</div>
+              <div class="info-value">${fmt(d.custoTotal||0)}ââÂ¬</div>
+            </div>
+          </div>
+
+          ${extrasHtml}
+
+          <h2>Ã°Å¸âÂ¦ Materiais</h2>
+          ${tabelaMateriais(d.materiais||[])}
+
+          <h2>Ã°Å¸âÂ· MÃÂ£o de Obra</h2>
+          ${tabelaMdo(d.maodeobra||[])}
+        `;
+        await carregarFaturas(obraId);
+      } catch(e) {
+      }
+    }
+
+    function tabelaMateriais(list) {
+      if (!list.length) return '<p class="empty">Sem materiais registados.</p>';
+      return `<table><thead><tr><th>Material</th><th>Un.</th><th>Qtd</th><th>PreÃÂ§o/Un</th><th>Total</th></tr></thead><tbody>
+        ${list.map(m => `<tr><td>${m.descricao}</td><td>${m.unidade}</td><td>${m.quantidade}</td><td>${fmt(m.precoUnit)}ââÂ¬</td><td><strong>${fmt(m.total)}ââÂ¬</strong></td></tr>`).join('')}
+      </tbody></table>`;
+    }
+
+    function tabelaMdo(list) {
+      if (!list.length) return '<p class="empty">Sem mÃÂ£o de obra registada.</p>';
+      return `<table><thead><tr><th>FuncionÃÂ¡rio</th><th>Horas</th><th>ââÂ¬/hora</th><th>Total</th></tr></thead><tbody>
+        ${list.map(m => `<tr><td>${m.funcionario}</td><td>${m.horas}h</td><td>${fmt(m.custoHora)}ââÂ¬</td><td><strong>${fmt(m.total)}ââÂ¬</strong></td></tr>`).join('')}
+      </tbody></table>`;
+    }
+
+    function fmt(v) { return parseFloat(v||0).toFixed(2); }
+    function badgeClass(e) { return {'CONCLUIDA':'badge-green','EM_PROGRESSO':'badge-blue','INICIADA':'badge-orange'}[e]||'badge-gray'; }
+
+    async function carregarFaturas(id) {
+      const div = document.getElementById('faturas-div');
+      if (!div) return;
+      try {
+        const res = await fetch(`/api/obra/${id}/faturas`);
+        const faturas = await res.json();
+        if (!faturas.length) { div.innerHTML = '<p class="empty">Sem faturas registadas.</p>'; return; }
+        div.innerHTML = `<table><thead><tr><th>NÂº Fatura</th><th>Valor</th><th>Estado</th><th>Emissão</th><th>Vencimento</th></tr></thead><tbody>
+          ${faturas.map(f => `<tr>
+            <td>${f.numero||'â'}</td>
+            <td><strong>${fmt(f.valor)}â¬</strong></td>
+            <td><span class="badge ${f.estado==='PAGA'?'badge-green':'badge-orange'}">${f.estado||'â'}</span></td>
+            <td>${f.dataEmissao||'â'}</td>
+            <td>${f.dataVencimento||'â'}</td>
+          </tr>`).join('')}
+        </tbody></table>`;
+      } catch(e) { div.innerHTML = '<p class="empty">Erro ao carregar faturas.</p>'; }
+    }
+
+    carregar();
+  </script>
+</body>
+</html>
+
+
+
