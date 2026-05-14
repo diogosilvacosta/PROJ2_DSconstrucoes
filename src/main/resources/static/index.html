@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Construções — Portfólio</title>
+  <script src="theme.js?v=20260418a"></script>
+  <script>
+    (() => {
+      const savedTheme = localStorage.getItem('ds-theme');
+      const theme = (savedTheme === 'light' || savedTheme === 'dark')
+        ? savedTheme
+        : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    })();
+  </script>
+  <link rel="icon" type="image/png" href="assets/ds-construcoes-logo.png?v=20260418d">
+  <link rel="stylesheet" href="style.css?v=20260418d">
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="logo">🏗️ DS Construções</div>
+      <a class="brand" href="index.html" aria-label="DS Construcoes">
+        <img class="brand-logo" src="assets/ds-construcoes-logo.png?v=20260418d" alt="DS Construcoes">
+      </a>
+      <div class="header-actions">
+      <nav>
+        <a href="index.html" class="active">Portfólio</a>
+        <a href="cliente.html">Portal Cliente</a>
+      </nav>
+      <button type="button" class="theme-toggle" data-theme-toggle>Night mode</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Construímos o seu futuro</h1>
+    <p>Empresa especializada em empreitadas de construção civil em Viana do Castelo</p>
+  </section>
+
+  <section class="section">
+    <h2>As nossas obras</h2>
+    <div id="obras-grid" class="grid"></div>
+  </section>
+
+  <footer>
+    <p>© 2026 DS Construções · Diogo Costa Nº29761 · Projeto II IPVC</p>
+  </footer>
+
+  <script>
+    async function carregarObras() {
+      const grid = document.getElementById('obras-grid');
+      try {
+        const res = await fetch('/api/portfolio');
+        const obras = await res.json();
+        if (obras.length === 0) {
+          grid.innerHTML = '<p class="empty">Nenhuma obra disponível.</p>';
+          return;
+        }
+        grid.innerHTML = obras.map(o => `
+          <div class="card" onclick="window.location='obra.html?id=${o.obraid}'">
+            <div class="card-badge ${badgeClass(o.estado)}">${o.estado}</div>
+            <h3>Obra #${o.obraid}</h3>
+            <p class="card-client">👤 ${o.cliente || 'Cliente'}</p>
+            <p class="card-date">📅 Início: ${o.datainicio || '—'}</p>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:${o.percentagem || 0}%"></div>
+            </div>
+            <p class="progress-label">${o.percentagem || 0}% concluído</p>
+          </div>
+        `).join('');
+      } catch(e) {
+        grid.innerHTML = '<p class="empty">Erro ao carregar obras.</p>';
+      }
+    }
+
+    function badgeClass(estado) {
+      return { 'CONCLUIDA': 'badge-green', 'EM_PROGRESSO': 'badge-blue', 'INICIADA': 'badge-orange' }[estado] || 'badge-gray';
+    }
+
+    carregarObras();
+  </script>
+</body>
+</html>

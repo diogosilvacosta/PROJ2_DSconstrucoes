@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal do Cliente — DS Construções</title>
+  <script>
+    (() => {
+      const savedTheme = localStorage.getItem('ds-theme');
+      const theme = (savedTheme === 'light' || savedTheme === 'dark')
+        ? savedTheme
+        : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    })();
+  </script>
+  <link rel="icon" type="image/png" href="assets/ds-construcoes-logo.png?v=20260418d">
+  <link rel="stylesheet" href="style.css?v=20260418d">
+  <script src="theme.js?v=20260418a" defer></script>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="logo">🏗️ DS Construções</div>
+      <a class="brand" href="index.html" aria-label="DS Construcoes">
+        <img class="brand-logo" src="assets/ds-construcoes-logo.png?v=20260418d" alt="DS Construcoes">
+      </a>
+      <div class="header-actions">
+      <nav>
+        <a href="index.html">Portfólio</a>
+        <a href="cliente.html" class="active">Portal Cliente</a>
+      </nav>
+      <button type="button" class="theme-toggle" data-theme-toggle>Night mode</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <h1>Portal do Cliente</h1>
+    <p class="subtitle">Selecione o seu perfil para ver o estado das suas obras</p>
+
+    <div class="search-box">
+      <select id="cliente-select">
+        <option value="">— Escolha o seu nome —</option>
+      </select>
+      <button onclick="verObras()">Ver as minhas obras →</button>
+    </div>
+
+    <div id="obras-cliente"></div>
+  </div>
+
+  <footer>
+    <p>© 2026 DS Construções · Diogo Costa Nº29761 · Projeto II IPVC</p>
+  </footer>
+
+  <script>
+    async function carregarClientes() {
+      const sel = document.getElementById('cliente-select');
+      try {
+        const res = await fetch('/api/clientes');
+        const clientes = await res.json();
+        clientes.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.textContent = `${c.nome} (${c.email})`;
+          sel.appendChild(opt);
+        });
+      } catch(e) { console.error(e); }
+    }
+
+    async function verObras() {
+      const id = document.getElementById('cliente-select').value;
+      const div = document.getElementById('obras-cliente');
+      if (!id) { div.innerHTML = '<p class="empty">Por favor selecione um cliente.</p>'; return; }
+      try {
+        const res = await fetch(`/api/cliente/${id}/obras`);
+        const obras = await res.json();
+        if (!obras.length) { div.innerHTML = '<p class="empty">Sem obras registadas para este cliente.</p>'; return; }
+        div.innerHTML = `
+          <h2>As suas obras</h2>
+          <div class="grid">
+            ${obras.map(o => `
+              <div class="card" onclick="window.location='obra.html?id=${o.obraid}'">
+                <div class="card-badge ${badgeClass(o.estado)}">${o.estado}</div>
+                <h3>Obra #${o.obraid}</h3>
+                <p>💰 Orçamento: <strong>${fmt(o.orcamento)}€</strong></p>
+                <p>📅 Início: ${o.datainicio || '—'}</p>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width:${o.percentagem||0}%"></div>
+                </div>
+                <p class="progress-label">${o.percentagem||0}% concluído</p>
+                <p class="card-link">Ver detalhes e custos →</p>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } catch(e) {
+        div.innerHTML = '<p class="empty">Erro ao carregar obras.</p>';
+      }
+    }
+
+    function fmt(v) { return parseFloat(v||0).toFixed(2); }
+    function badgeClass(e) { return {'CONCLUIDA':'badge-green','EM_PROGRESSO':'badge-blue','INICIADA':'badge-orange'}[e]||'badge-gray'; }
+
+    carregarClientes();
+  </script>
+</body>
+</html>
