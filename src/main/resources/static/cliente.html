@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal do Cliente ââ¬â DS ConstruÃÂ§ÃÂµes</title>
+  <title>Portal do Cliente — DS Construções</title>
   <script>
     (() => {
       const savedTheme = localStorage.getItem('ds-theme');
@@ -14,23 +14,23 @@
       document.documentElement.style.colorScheme = theme;
     })();
   </script>
-  <link rel="icon" type="image/png" href="assets/ds-construcoes-logo.png?v=20260418d">
-  <link rel="stylesheet" href="style.css?v=20260418d">
-  <script src="theme.js?v=20260418a" defer></script>
+  <link rel="icon" type="image/png" href="assets/ds-construcoes-logo.png">
+  <link rel="stylesheet" href="style.css?v=20260515">
+  <script src="theme.js?v=20260515" defer></script>
 </head>
 <body>
   <header>
     <div class="header-inner">
       <a class="brand" href="index.html" aria-label="DS Construcoes">
-        <img class="brand-logo" src="assets/ds-construcoes-logo.png?v=20260418d" alt="DS Construcoes">
-        <span class="brand-name">DS Constru&#231;&#245;es</span>
+        <img class="brand-logo" src="assets/ds-construcoes-logo.png" alt="DS Construcoes">
+        <span class="brand-name">DS Construções</span>
       </a>
       <div class="header-actions">
-      <nav>
-        <a href="index.html">PortfÃÂ³lio</a>
-        <a href="cliente.html" class="active">Portal Cliente</a>
-      </nav>
-      <button type="button" class="theme-toggle" data-theme-toggle>Night mode</button>
+        <nav>
+          <a href="index.html">Portfólio</a>
+          <a href="cliente.html" class="active">Portal Cliente</a>
+        </nav>
+        <button type="button" class="theme-toggle" data-theme-toggle>Night mode</button>
       </div>
     </div>
   </header>
@@ -41,16 +41,16 @@
 
     <div class="search-box">
       <select id="cliente-select">
-        <option value="">ââ¬â Escolha o seu nome ââ¬â</option>
+        <option value="">— Escolha o seu nome —</option>
       </select>
-      <button onclick="verObras()">Ver as minhas obras ââ â</button>
+      <button onclick="verObras()">Ver as minhas obras →</button>
     </div>
 
     <div id="obras-cliente"></div>
   </div>
 
   <footer>
-    <p>ÃÂ© 2026 DS ConstruÃÂ§ÃÂµes ÃÂ· Diogo Costa NÃÂº29761 ÃÂ· Projeto II IPVC</p>
+    <p>© 2026 DS Construções · Diogo Costa Nº29761 · Projeto II IPVC</p>
   </footer>
 
   <script>
@@ -83,13 +83,13 @@
               <div class="card" onclick="window.location='obra.html?id=${o.obraid}'">
                 <div class="card-badge ${badgeClass(o.estado)}">${o.estado}</div>
                 <h3>Obra #${o.obraid}</h3>
-                <p>Ã°Å¸âÂ° OrÃÂ§amento: <strong>${fmt(o.orcamento)}ââÂ¬</strong></p>
-                <p>Ã°Å¸ââ¦ InÃÂ­cio: ${o.datainicio || 'ââ¬â'}</p>
+                <p>💰 Orçamento: <strong>${fmt(o.orcamento)}€</strong></p>
+                <p>📅 Início: ${o.datainicio || '—'}</p>
                 <div class="progress-bar">
                   <div class="progress-fill" style="width:${o.percentagem||0}%"></div>
                 </div>
-                <p class="progress-label">${o.percentagem||0}% concluÃÂ­do</p>
-                <p class="card-link">Ver detalhes e custos ââ â</p>
+                <p class="progress-label">${o.percentagem||0}% concluído</p>
+                <p class="card-link">Ver detalhes e custos →</p>
               </div>
             `).join('')}
           </div>
@@ -106,5 +106,3 @@
   </script>
 </body>
 </html>
-
-

@@ -1,4 +1,4 @@
-﻿/* ===== DS ConstruÃ§Ãµes â€” Portal Web ===== */
+/* ===== DS Construções — Portal Web ===== */
 :root {
   --primary: #173f6b;
   --primary-dark: #112b46;
@@ -293,4 +293,3 @@ footer {
   .hero h1 { font-size: 1.8rem; }
   .grid, .info-grid { grid-template-columns: 1fr; }
 }
-
