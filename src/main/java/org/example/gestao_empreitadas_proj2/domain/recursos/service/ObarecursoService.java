@@ -1,4 +1,4 @@
-﻿package org.example.gestao_empreitadas_proj2.domain.recursos.service;
+package org.example.gestao_empreitadas_proj2.domain.recursos.service;
 import org.example.gestao_empreitadas_proj2.domain.recursos.Obarecurso;
 import org.example.gestao_empreitadas_proj2.domain.recursos.repository.ObarecursoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

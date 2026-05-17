@@ -1,4 +1,4 @@
-﻿package org.example.gestao_empreitadas_proj2.domain.planeamento;
+package org.example.gestao_empreitadas_proj2.domain.planeamento;
 import jakarta.persistence.*;
 import org.example.gestao_empreitadas_proj2.domain.obra.Obra;
 import org.hibernate.annotations.ColumnDefault;

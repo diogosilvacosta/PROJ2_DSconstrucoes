@@ -1,4 +1,4 @@
-﻿package org.example.gestao_empreitadas_proj2.domain.planeamento.service;
+package org.example.gestao_empreitadas_proj2.domain.planeamento.service;
 import org.example.gestao_empreitadas_proj2.domain.planeamento.Planotrabalho;
 import org.example.gestao_empreitadas_proj2.domain.planeamento.repository.PlanotrabalhoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

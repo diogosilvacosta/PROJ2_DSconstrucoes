@@ -1,4 +1,4 @@
-﻿package org.example.gestao_empreitadas_proj2.domain.obra.repository;
+package org.example.gestao_empreitadas_proj2.domain.obra.repository;
 import org.example.gestao_empreitadas_proj2.domain.obra.Esboco;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

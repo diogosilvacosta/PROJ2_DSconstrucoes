@@ -1,4 +1,4 @@
-﻿package org.example.gestao_empreitadas_proj2.domain.cliente.service;
+package org.example.gestao_empreitadas_proj2.domain.cliente.service;
 import org.example.gestao_empreitadas_proj2.domain.cliente.Cliente;
 import org.example.gestao_empreitadas_proj2.domain.cliente.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;

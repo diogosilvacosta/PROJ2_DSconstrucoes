@@ -1,4 +1,4 @@
-﻿package org.example.gestao_empreitadas_proj2.domain.obra.service;
+package org.example.gestao_empreitadas_proj2.domain.obra.service;
 import org.example.gestao_empreitadas_proj2.domain.obra.ObraMaterial;
 import org.example.gestao_empreitadas_proj2.domain.obra.repository.ObraMaterialRepository;
 import org.springframework.beans.factory.annotation.Autowired;

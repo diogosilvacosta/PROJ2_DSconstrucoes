@@ -1,4 +1,4 @@
-﻿package org.example.gestao_empreitadas_proj2.domain.financeiro;
+package org.example.gestao_empreitadas_proj2.domain.financeiro;
 
 import jakarta.persistence.*;
 import org.example.gestao_empreitadas_proj2.domain.cliente.Cliente;

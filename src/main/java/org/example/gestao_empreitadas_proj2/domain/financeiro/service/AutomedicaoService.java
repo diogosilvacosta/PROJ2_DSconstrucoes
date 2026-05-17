@@ -1,4 +1,4 @@
-﻿package org.example.gestao_empreitadas_proj2.domain.financeiro.service;
+package org.example.gestao_empreitadas_proj2.domain.financeiro.service;
 import org.example.gestao_empreitadas_proj2.domain.financeiro.Automedicao;
 import org.example.gestao_empreitadas_proj2.domain.financeiro.repository.AutomedicaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

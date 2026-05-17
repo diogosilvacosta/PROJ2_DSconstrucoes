@@ -1,4 +1,4 @@
-﻿package org.example.gestao_empreitadas_proj2.api;
+package org.example.gestao_empreitadas_proj2.api;
 
 import org.example.gestao_empreitadas_proj2.domain.obra.Obra;
 import org.example.gestao_empreitadas_proj2.domain.obra.repository.ObraRepository;

@@ -1,4 +1,4 @@
-﻿package org.example.gestao_empreitadas_proj2.domain.financeiro.service;
+package org.example.gestao_empreitadas_proj2.domain.financeiro.service;
 import org.example.gestao_empreitadas_proj2.domain.financeiro.Proposta;
 import org.example.gestao_empreitadas_proj2.domain.financeiro.repository.PropostaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
